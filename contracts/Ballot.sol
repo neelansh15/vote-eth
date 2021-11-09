@@ -12,17 +12,18 @@ struct Candidate {
 }
 
 contract Ballot {
-    address public owner;
+    address public chairperson;
 
     mapping(address => Voter) public voters;
     Candidate[] public candidates;
 
-    constructor(bytes32[] memory candidateNames) {
-        owner = msg.sender;
+    constructor() {
+        chairperson = msg.sender;
+    }
 
-        for (uint256 i = 0; i < candidateNames.length; i++) {
-            candidates.push(Candidate({name: candidateNames[i], voteCount: 0}));
-        }
+    function addCandidate(bytes32 name) external {
+        require(msg.sender == chairperson, "Only the chairperson can add candidates");
+        candidates.push(Candidate({name: name, voteCount: 0}));
     }
 
     function vote(uint256 candidateId) external {
