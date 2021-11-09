@@ -36,6 +36,10 @@ contract Ballot {
         candidates[candidateId].voteCount += 1;
     }
 
+    function getCandidates() external view returns (Candidate[] memory) {
+        return candidates;
+    }
+
     function getWinningCandidateId() public view returns (uint256 candidateId) {
         uint256 maximumVotes = 0;
 
@@ -47,7 +51,7 @@ contract Ballot {
         }
     }
 
-    function winnerName() public view returns (byte32 name) {
+    function winnerName() public view returns (bytes32 name) {
         name = candidates[getWinningCandidateId()].name;
     }
 }
