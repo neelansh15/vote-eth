@@ -39,5 +39,7 @@ describe("Ballot", function () {
     const winnerBytes32 = await ballot.winnerName();
     const winnerName = ethers.utils.parseBytes32String(winnerBytes32);
     console.log("Winner Result: ", winnerName);
+
+    expect(winnerName).to.equal("Daniil Dubov");
   });
 });
