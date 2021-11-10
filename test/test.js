@@ -2,7 +2,7 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 const candidateArray = ["Daniil Dubov", "Levon Aronian", "Nihal Sarin"];
-describe("Ballot Candidates", function () {
+describe("Ballot", function () {
   it("Should add and get candidates and display their names ", async function () {
     const Ballot = await ethers.getContractFactory("Ballot");
     const ballot = await Ballot.deploy();
@@ -14,11 +14,30 @@ describe("Ballot Candidates", function () {
     });
 
     const candidates = await ballot.getCandidates();
-    console.log("Response from getCandidates:", candidates);
 
     const names = candidates.map((candidate) =>
       ethers.utils.parseBytes32String(candidate.name)
     );
-    console.log("Names: ", names);
+    console.log("Candidate Names from the Contract: ", names);
+  });
+
+  it("Should add votes and display winner", async function () {
+    const Ballot = await ethers.getContractFactory("Ballot");
+    const ballot = await Ballot.deploy();
+    await ballot.deployed();
+
+    // Add candidates
+    candidateArray.forEach(async (name) => {
+      await ballot.addCandidate(ethers.utils.formatBytes32String(name));
+    });
+
+    const [account0, account1] = await ethers.getSigners();
+
+    await ballot.connect(account0).vote(0);
+    await ballot.connect(account1).vote(0);
+
+    const winnerBytes32 = await ballot.winnerName();
+    const winnerName = ethers.utils.parseBytes32String(winnerBytes32);
+    console.log("Winner Result: ", winnerName);
   });
 });
