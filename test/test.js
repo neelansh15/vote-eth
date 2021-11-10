@@ -18,7 +18,8 @@ describe("Ballot", function () {
     const names = candidates.map((candidate) =>
       ethers.utils.parseBytes32String(candidate.name)
     );
-    console.log("Candidate Names from the Contract: ", names);
+    // console.log("Candidate Names from the Contract: ", names);
+    expect(names).to.deep.equal(candidateArray);
   });
 
   it("Should add votes and display winner", async function () {
@@ -38,7 +39,7 @@ describe("Ballot", function () {
 
     const winnerBytes32 = await ballot.winnerName();
     const winnerName = ethers.utils.parseBytes32String(winnerBytes32);
-    console.log("Winner Result: ", winnerName);
+    // console.log("Winner Result: ", winnerName);
 
     expect(winnerName).to.equal("Daniil Dubov");
   });
